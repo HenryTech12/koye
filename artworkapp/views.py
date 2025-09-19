@@ -10,6 +10,7 @@ from .serializers import ArtworkSerializer
 import jwt,requests
 from userapp.views import getUserByToken
 from .pagination import SearchPagination
+from google import generativeai as genai
 # Create your views here.
 
 blockchainUrl = 'https://koye.onrender.com'
@@ -28,7 +29,19 @@ def getCID(request):
         return None
 class TagView(APIView):
     def get(self,request):
-        pass
+        user_input = request.get('userInput')
+        client = genai.Client()
+        prompt = f"""
+        You are an autocomplete engine for an African art,music, and NFT platform
+        The user is typing a tag: "{user_input}".
+        Suggest 4-8 relevant tag completions related to art, African culture, music or NFTs.
+        return them strictly as a JSON array of strings, nothing else.
+        """
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt
+        )
+        return Response({"tags":response.text},status=200)
 class LikeArt(APIView):
     def post(self,request,pk):
         creator=request.data.get('userId')
@@ -169,3 +182,13 @@ class GetArtworkView(APIView):
                 return Response(artworkSerializer.data)
             else:
                 return Response("invalid token!")
+            
+class RecommendationView(APIView):
+    def get(self,request):
+        client = genai.Client()
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents="Explain how AI works in a few words"
+        )
+        return Response({"tags":response.text},status=200)
+        
