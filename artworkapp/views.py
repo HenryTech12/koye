@@ -31,18 +31,23 @@ def getCID(request):
 class TagView(APIView):
     def get(self,request):
         user_input = request.data.get('userInput')
-        client = genai.Client()
         prompt = f"""
         You are an autocomplete engine for an African art,music, and NFT platform
         The user is typing a tag: "{user_input}".
         Suggest 4-8 relevant tag completions related to art, African culture, music or NFTs.
         return them strictly as a JSON array of strings, nothing else.
         """
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt
+        
+        genai.configure(api_key=os.environ.get('GOOGLE_API_KEY'))
+
+        # Example: generate text
+        response = genai.chat.create(
+            model="chat-bison-001",
+            messages=[
+                {"author": "user", "content": prompt},
+            ],
         )
-        return Response({"tags":response.text},status=200)
+        return Response({"tags":response.last},status=200)
 class LikeArt(APIView):
     def post(self,request,pk):
         creator=request.data.get('userId')
