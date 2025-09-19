@@ -3,7 +3,6 @@ import os
 from django.forms.models import model_to_dict
 from django.conf import settings
 from rest_framework.views import Response, APIView
-import ipfshttpclient
 from .models import Artwork
 from django.db.models import F
 from userapp.models import User
