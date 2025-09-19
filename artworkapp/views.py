@@ -30,7 +30,7 @@ def getCID(request):
         return None
 class TagView(APIView):
     def get(self,request):
-        user_input = request.get('userInput')
+        user_input = request.data.get('userInput')
         client = genai.Client()
         prompt = f"""
         You are an autocomplete engine for an African art,music, and NFT platform
