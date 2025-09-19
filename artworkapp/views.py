@@ -41,7 +41,8 @@ class TagView(APIView):
         genai.configure(api_key=os.environ.get('GOOGLE_API_KEY'))
 
         # Example: generate text
-        response = genai.chat.create(
+        
+        response = genai.ChatCompletion.create(
             model="chat-bison-001",
             messages=[
                 {"author": "user", "content": prompt},
