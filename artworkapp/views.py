@@ -38,17 +38,30 @@ class TagView(APIView):
         return them strictly as a JSON array of strings, nothing else.
         """
         
-        genai.configure(api_key=os.environ.get('GOOGLE_API_KEY'))
+        api_key=os.environ.get('GOOGLE_API_KEY')
+        url = "https://generative.googleapis.com/v1beta2/models/text-bison-001:generate"
+        payload = {
+            "prompt": {
+            "text": prompt
+        },
+        "temperature": 0.7,
+        "maxOutputTokens": 256
+        }
 
-        # Example: generate text
-        
-        response = genai.ChatCompletion.create(
-            model="chat-bison-001",
-            messages=[
-                {"author": "user", "content": prompt},
-            ],
-        )
-        return Response({"tags":response.last},status=200)
+        headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+        }
+
+        response = requests.post(url, headers=headers, data=json.dumps(payload))
+
+        if response.status_code == 200:
+            result = response.json()
+            print(result["candidates"][0]["content"])  # The generated text
+            return Response(result)
+        else:
+            print("Error:", response.status_code, response.text)
+            return Response("error":response.text,status=response.status_code)
 class LikeArt(APIView):
     def post(self,request,pk):
         creator=request.data.get('userId')
