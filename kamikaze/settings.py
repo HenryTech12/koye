@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,7 @@ SECRET_KEY = 'django-insecure-#!5s3))=3se_81o-+ql7w2sd)k5&-d#$wo_ec4qd66mzvol1j4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -79,13 +80,7 @@ WSGI_APPLICATION = 'kamikaze.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'kamikaze',
-        'USER':'root',
-        'PASSWORD':'Henry123@#$',
-        'HOST':'localhost',
-    }
+    'default': dj_database_url.config("DATABASE_URL")
 }
 
 
