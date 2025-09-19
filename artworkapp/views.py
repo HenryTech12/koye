@@ -61,7 +61,7 @@ class TagView(APIView):
             return Response(result)
         else:
             print("Error:", response.status_code, response.text)
-            return Response("error":response.text,status=response.status_code)
+            return Response(response.text,status=response.status_code)
 class LikeArt(APIView):
     def post(self,request,pk):
         creator=request.data.get('userId')
