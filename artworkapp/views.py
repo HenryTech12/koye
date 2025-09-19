@@ -10,7 +10,8 @@ from .serializers import ArtworkSerializer
 import jwt,requests
 from userapp.views import getUserByToken
 from .pagination import SearchPagination
-from google import generativeai as genai
+import google.generativeai as genai
+
 # Create your views here.
 
 blockchainUrl = 'https://koye.onrender.com'
